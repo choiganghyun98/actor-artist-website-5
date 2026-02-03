@@ -8,7 +8,7 @@ img{display:block;max-width:100%;}
 .bgVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.02);}
 .bgDim{position:absolute;inset:0;background:rgba(0,0,0,.22);backdrop-filter:saturate(1.1);}
 .header{position:fixed;left:0;top:0;width:100%;z-index:20;display:flex;justify-content:space-between;align-items:flex-start;padding:calc(var(--pad) - 4px) var(--pad);transition:opacity .6s ease,transform .6s ease;}
-.rogo{width:min(280px,40vw);height:auto;opacity:.96;}
+.rogo{width:min(280px,40vw);height:auto;opacity:.96;margin-top:-90px;}
 .icons{display:flex;gap:12px;align-items:center;}
 .icon{display:inline-flex;width:34px;height:34px;align-items:center;justify-content:center;opacity:.92;transition:opacity .25s ease,transform .25s ease;}
 .icon:hover{opacity:1;transform:translateY(-1px);}
@@ -27,8 +27,8 @@ body.is-focus .card.is-active .thumb img{filter:none;}
 .overlayInner{position:relative;width:min(1100px,92vw);height:min(78vh,720px);border-radius:14px;overflow:hidden;background:rgba(10,10,10,.42);border:1px solid rgba(255,255,255,.12);}
 .closeBtn{position:absolute;right:10px;top:6px;z-index:5;width:42px;height:42px;border:0;background:transparent;color:rgba(255,255,255,.85);font-size:30px;line-height:42px;cursor:pointer;}
 .overlayGrid{display:grid;grid-template-columns:1.35fr 1fr;height:100%;}
-.overlayLeft{height:100%;display:flex;align-items:center;justify-content:center;padding:18px;}
-.overlayImg{max-width:100%;max-height:100%;border-radius:12px;object-fit:contain;}
+.overlayLeft{height:100%;display:flex;align-items:center;justify-content:center;padding:18px 100px;}
+.overlayImg{max-width:100%;max-height:calc(78vh - 100px);border-radius:12px;object-fit:contain;}
 .overlayRight{height:100%;padding:22px 22px 22px 0;display:flex;flex-direction:column;gap:12px;overflow:auto;}
 .overlayTitle{font-size:22px;letter-spacing:.2px;}
 .overlayMeta{font-size:13px;color:var(--sub);}
@@ -59,5 +59,5 @@ body.is-focus .card.is-active .thumb img{filter:none;}
 @media (max-width:520px){
   :root{--pad:16px;--gap:14px;}
   .masonry{columns:1 260px;}
-  .rogo{width:min(220px,55vw);}
+  .rogo{width:min(220px,55vw);margin-top:-18px;}
 }
