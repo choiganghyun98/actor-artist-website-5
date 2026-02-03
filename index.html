@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>actor-artist-website-5</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- INTRO + MAIN BG VIDEO (seamless) -->
+  <div id="bgVideoWrap" class="bgVideoWrap">
+    <video id="video1" class="bgVideo" autoplay muted playsinline preload="auto">
+      <source src="images/video1.mp4" type="video/mp4" />
+    </video>
+    <div class="bgDim"></div>
+  </div>
+
+  <!-- MAIN UI -->
+  <header id="header" class="header is-hidden">
+    <img class="rogo" src="images/rogo1.png" alt="rogo" />
+    <nav class="icons">
+      <a class="icon" href="#instagram" aria-label="instagram"><img src="images/icon_instagram.svg" alt="" /></a>
+      <a class="icon" href="mailto:your@email.com" aria-label="mail"><img src="images/icon_mail.svg" alt="" /></a>
+      <a class="icon" href="tel:+820000000000" aria-label="phone"><img src="images/icon_phone.svg" alt="" /></a>
+      <a class="icon" href="https://blog.naver.com/yourid" target="_blank" rel="noopener" aria-label="naver blog"><img src="images/icon_blog.svg" alt="" /></a>
+    </nav>
+  </header>
+
+  <main id="main" class="main is-hidden">
+    <section class="galleryWrap">
+      <div id="masonry" class="masonry"></div>
+    </section>
+  </main>
+
+  <!-- DETAIL OVERLAY -->
+  <div id="overlay" class="overlay is-hidden" aria-hidden="true">
+    <div class="overlayInner">
+      <button id="closeBtn" class="closeBtn" aria-label="close">×</button>
+      <div class="overlayGrid">
+        <div class="overlayLeft">
+          <img id="overlayImg" class="overlayImg" src="" alt="" />
+        </div>
+        <div class="overlayRight">
+          <div id="overlayTitle" class="overlayTitle"></div>
+          <div id="overlayMeta" class="overlayMeta"></div>
+          <div id="overlayDesc" class="overlayDesc"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
