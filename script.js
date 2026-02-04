@@ -115,3 +115,11 @@ async function boot(){
   document.addEventListener("touchstart",skipIntro,true);
 }
 boot();
+
+// iOS Safari: masonry/columns 첫 카드 깜빡임 방지 reflow
+window.addEventListener("load", () => {
+  requestAnimationFrame(() => {
+    document.body.style.transform = "translateZ(0)";
+    setTimeout(() => (document.body.style.transform = ""), 60);
+  });
+});
