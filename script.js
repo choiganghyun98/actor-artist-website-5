@@ -41,6 +41,10 @@ function showMain(){
   isMain=true;
   header.classList.remove("is-hidden");
   main.classList.remove("is-hidden");
+
+  // iOS Safari columns paint bug: force repaint right after reveal
+  setTimeout(fixMasonryIOS, 60);
+  setTimeout(fixMasonryIOS, 250);
 }
 
 function buildMasonry(){
@@ -102,8 +106,23 @@ function skipIntro(e){
   onIntroEnd();
 }
 
+function setMobileVideo(){
+  if(window.matchMedia("(max-width:520px)").matches){
+    // 모바일 전용 영상 파일
+    if(video.getAttribute("data-mobile-set")!=="1"){
+      video.src="images/video1-mobile.mp4";
+      video.setAttribute("data-mobile-set","1");
+      video.load();
+    }
+  }
+}
+
 async function boot(){
   buildMasonry();
+
+  // 모바일 전용 영상 적용
+  setMobileVideo();
+
   try{await video.play();}catch(e){}
   video.addEventListener("ended",onIntroEnd,{once:true});
   video.addEventListener("timeupdate",()=>{
@@ -116,10 +135,47 @@ async function boot(){
 }
 boot();
 
-// iOS Safari: masonry/columns 첫 카드 깜빡임 방지 reflow
-window.addEventListener("load", () => {
-  requestAnimationFrame(() => {
-    document.body.style.transform = "translateZ(0)";
-    setTimeout(() => (document.body.style.transform = ""), 60);
+/* iOS Safari: masonry/columns 첫 카드 깜빡임/실종 방지 (strong fix) */
+function fixMasonryIOS(){
+  if(!masonry) return;
+
+  masonry.style.webkitTransform="translateZ(0)";
+  masonry.style.transform="translateZ(0)";
+  masonry.style.webkitBackfaceVisibility="hidden";
+  masonry.style.backfaceVisibility="hidden";
+  masonry.offsetHeight; // force reflow
+
+  const firstCard=masonry.querySelector(".card");
+  if(firstCard){
+    firstCard.style.webkitTransform="translateZ(0)";
+    firstCard.style.transform="translateZ(0)";
+    firstCard.style.webkitBackfaceVisibility="hidden";
+    firstCard.style.backfaceVisibility="hidden";
+    firstCard.offsetHeight;
+  }
+
+  requestAnimationFrame(()=>{
+    masonry.style.webkitTransform="";
+    masonry.style.transform="";
+    if(firstCard){
+      firstCard.style.webkitTransform="";
+      firstCard.style.transform="";
+    }
   });
+}
+
+window.addEventListener("load",()=>{
+  setTimeout(fixMasonryIOS,50);
+  setTimeout(fixMasonryIOS,250);
+  setTimeout(fixMasonryIOS,900);
+});
+
+window.addEventListener("resize",()=>{
+  setMobileVideo();
+  setTimeout(fixMasonryIOS,120);
+});
+
+window.addEventListener("orientationchange",()=>{
+  setMobileVideo();
+  setTimeout(fixMasonryIOS,200);
 });
