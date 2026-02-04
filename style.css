@@ -59,7 +59,12 @@ body.is-focus .card.is-active .thumb img{filter:none;}
   .overlayRight{padding:0 18px 18px;}
 }
 @media (max-width:520px){
+  .bgVideo{
+    object-fit: contain;
+    transform: none;
+    background:#000;
+  }
   :root{--pad:16px;--gap:10px;}
-  .masonry{columns:1 260px;}
+  .masonry{columns:3; column-gap:var(--gap);}
   .rogo{width:clamp(85px,22vw,100px);margin-top:6px;}
 }
