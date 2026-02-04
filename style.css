@@ -4,26 +4,53 @@ html,body{margin:0;padding:0;background:#000;color:var(--txt);font-family:system
 a{color:inherit;text-decoration:none;}
 img{display:block;max-width:100%;}
 .is-hidden{opacity:0;pointer-events:none;transform:translateY(6px);}
+
 .bgVideoWrap{position:fixed;inset:0;z-index:0;overflow:hidden;background:#000;}
 .bgVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.02);}
 .bgDim{position:absolute;inset:0;background:rgba(0,0,0,.22);backdrop-filter:saturate(1.1);}
+
 .header{position:fixed;left:0;top:0;width:100%;z-index:20;display:flex;justify-content:space-between;align-items:flex-start;padding:0 var(--pad);height:54px;pointer-events:none;transition:opacity .6s ease,transform .6s ease;}
 .rogo{width:clamp(90px,10vw,90px);height:auto;opacity:.96;margin-top:8px;}
 .header a,
 .header img{pointer-events:auto;}
+
 .icons{display:flex;gap:12px;align-items:center;margin-top:10px;pointer-events:auto;}
 .icon{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;opacity:.92;transition:opacity .25s ease,transform .25s ease;}
 .icon:hover{opacity:1;transform:translateY(-1px);}
 .icon img{width:20px;height:20px;}
+
 .main{position:relative;z-index:10;min-height:100vh;padding:86px var(--pad) 80px;transition:opacity .8s ease,transform .8s ease;}
 .galleryWrap{max-width:1200px;margin:0 auto;}
-.masonry{columns:4 260px;column-gap:var(--gap);}
-.card{break-inside:avoid;margin:0 0 var(--gap);position:relative;cursor:pointer;transform:translateZ(0);}
+.masonry{columns:4 260px;column-gap:var(--gap);padding-top:12px;}
+
+.card{
+  break-inside:avoid;
+  margin:0 0 var(--gap);
+  position:relative;
+  cursor:pointer;
+  transform:translateZ(0);
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+}
+
 .thumb{width:100%;border-radius:10px;overflow:hidden;position:relative;}
-.thumb img{width:100%;height:auto;display:block;filter:none;transition:filter .35s ease,transform .35s ease;transform:scale(1.001);}
+.thumb img{
+  width:100%;
+  height:auto;
+  display:block;
+  object-fit:contain; /* 비율 원본 유지 */
+  filter:none;
+  transition:filter .35s ease,transform .35s ease;
+  transform:scale(1.001);
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+}
+
 .card:hover .thumb img{transform:scale(1.01);}
+
 body.is-focus .card:not(.is-active) .thumb img{filter:blur(var(--blur)) brightness(.85);}
 body.is-focus .card.is-active .thumb img{filter:none;}
+
 .overlay{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35);backdrop-filter:blur(6px);transition:opacity .25s ease;}
 .overlay.is-hidden{opacity:0;pointer-events:none;}
 .overlayInner{position:relative;width:min(1100px,92vw);height:min(78vh,720px);border-radius:14px;overflow:hidden;background:rgba(10,10,10,.42);border:1px solid rgba(255,255,255,.12);}
@@ -36,20 +63,11 @@ body.is-focus .card.is-active .thumb img{filter:none;}
 .overlayMeta{font-size:13px;color:var(--sub);}
 .overlayDesc{font-size:14px;line-height:1.7;color:rgba(255,255,255,.86);white-space:pre-line;}
 
-/* ===== curated asymmetry (KEEP ORIGINAL IMAGE RATIO) ===== */
-.thumb img{width:100%;height:auto;object-fit:contain;} /* 비율 원본 유지 */
-
-/* 여백 무조건 유지 */
-.masonry{padding-top:12px;} /* 위쪽 숨통 */
-.card{margin:0 0 var(--gap);}
-
-/* 큐레이션 효과: 특정 카드만 살짝 더 크게 (비율 유지 상태로 스케일업) */
-.card.is-hero{width:calc(100% + 22px);margin-left:-11px;} /* 중심에서 살짝만 확장 */
+/* ===== curated asymmetry ===== */
+.card.is-hero{width:calc(100% + 22px);margin-left:-11px;}
 .card.is-wide{width:calc(100% + 14px);margin-left:-7px;}
 .card.is-tall{width:calc(100% + 10px);margin-left:-5px;}
 .card.is-square{width:calc(100% + 6px);margin-left:-3px;}
-
-/* 너무 튀지 않게 */
 .card.is-hero .thumb{border-radius:14px;}
 
 @media (max-width:900px){
@@ -58,6 +76,7 @@ body.is-focus .card.is-active .thumb img{filter:none;}
   .overlayGrid{grid-template-columns:1fr;}
   .overlayRight{padding:0 18px 18px;}
 }
+
 /* =========================
    MOBILE FIX (FINAL)
    ========================= */
@@ -81,12 +100,9 @@ body.is-focus .card.is-active .thumb img{filter:none;}
     margin-left:0;
   }
 
-  /* iOS 모바일 동영상 깨짐/과도한 크롭 방지 */
-  .introVideo,
+  /* 모바일 배경 비디오: 모바일 전용 video 비율에 맞춰 cover 유지 */
   .bgVideo{
-    width:100vw !important;
-    height:100vh !important;
-    object-fit:contain !important;
+    object-fit:cover !important;
     transform:none !important;
   }
 
@@ -97,14 +113,10 @@ body.is-focus .card.is-active .thumb img{filter:none;}
 
 /* 430px 이하: 2열 */
 @media (max-width:430px){
-  .masonry{
-    columns:2;
-  }
+  .masonry{columns:2;}
 }
 
 /* 350px 이하: 1열(초소형 기기 안정용) */
 @media (max-width:350px){
-  .masonry{
-    columns:1;
-  }
+  .masonry{columns:1;}
 }
