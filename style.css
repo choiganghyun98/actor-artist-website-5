@@ -67,7 +67,3 @@ body.is-focus .card.is-active .thumb img{filter:none;}
 @media (max-width:430px){
   .masonry{columns:2;}
 }
-
-@media (max-width:350px){
-  .masonry{columns:1;}
-}
