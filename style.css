@@ -58,12 +58,53 @@ body.is-focus .card.is-active .thumb img{filter:none;}
   .overlayGrid{grid-template-columns:1fr;}
   .overlayRight{padding:0 18px 18px;}
 }
+/* =========================
+   MOBILE FIX (FINAL)
+   ========================= */
+
+/* 520px 이하: 3열 + 여백 일정 + 카드 확장 금지 */
 @media (max-width:520px){
   :root{--pad:16px;--gap:10px;}
-  .masonry{columns:3;column-gap:var(--gap);padding-top:12px;}
-  .card.is-hero,.card.is-wide,.card.is-tall,.card.is-square{width:100%;margin-left:0;}
+
+  .masonry{
+    columns:3;
+    column-gap:var(--gap);
+    padding-top:12px;
+  }
+
+  /* 모바일에서 카드 width 확장/음수 margin 제거 -> 간격 깨짐 방지 */
+  .card.is-hero,
+  .card.is-wide,
+  .card.is-tall,
+  .card.is-square{
+    width:100%;
+    margin-left:0;
+  }
+
+  /* iOS 모바일 동영상 깨짐/과도한 크롭 방지 */
+  .introVideo,
+  .bgVideo{
+    width:100vw !important;
+    height:100vh !important;
+    object-fit:contain !important;
+    transform:none !important;
+  }
+
+  .intro{
+    background:#000;
+  }
 }
 
+/* 430px 이하: 2열 */
 @media (max-width:430px){
-  .masonry{columns:2;}
+  .masonry{
+    columns:2;
+  }
+}
+
+/* 350px 이하: 1열(초소형 기기 안정용) */
+@media (max-width:350px){
+  .masonry{
+    columns:1;
+  }
 }
