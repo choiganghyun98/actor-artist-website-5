@@ -70,9 +70,13 @@ body.is-focus .card.is-active .thumb img{filter:none;}
 .card.is-square{width:calc(100% + 6px);margin-left:-3px;}
 .card.is-hero .thumb{border-radius:14px;}
 
+@media (min-width:901px){
+  .main{ padding-top:250px; }
+}
+
 @media (max-width:900px){
   .masonry{columns:3 120px;column-gap:var(--gap);padding-top:12px;}
-  .main{padding:104px var(--pad) 72px;}
+  .main{padding:140px var(--pad) 72px;}
   .overlayGrid{grid-template-columns:1fr;}
   .overlayRight{padding:0 18px 18px;}
 }
