@@ -36,15 +36,65 @@ const overlayDesc=document.getElementById("overlayDesc");
 
 let isMain=false;
 
+/* ✅ 모바일용 영상 교체 (현재 index.html 구조는 source 2개라서 이 방식이 맞음) */
+function setMobileVideo(){
+  if(!video) return;
+  const isMobile = window.matchMedia("(max-width:520px)").matches;
+  if(!isMobile) return;
+  if(video.getAttribute("data-mobile-set")==="1") return;
+
+  const sources = video.querySelectorAll("source");
+  if(!sources || sources.length===0) return;
+
+  sources.forEach(s=>{
+    const type=(s.getAttribute("type")||"").toLowerCase();
+    if(type.includes("mp4")) s.setAttribute("src","images/video1-mobile.mp4");
+    if(type.includes("webm")) s.setAttribute("src","images/video1-mobile.webm");
+  });
+
+  video.setAttribute("data-mobile-set","1");
+  video.load();
+}
+
+/* ✅ iOS Safari columns(masonry) 첫 카드 실종/깜빡임 fix */
+function fixMasonryIOS(){
+  if(!masonry) return;
+
+  masonry.style.webkitTransform="translateZ(0)";
+  masonry.style.transform="translateZ(0)";
+  masonry.style.webkitBackfaceVisibility="hidden";
+  masonry.style.backfaceVisibility="hidden";
+  masonry.offsetHeight;
+
+  const firstCard=masonry.querySelector(".card");
+  if(firstCard){
+    firstCard.style.webkitTransform="translateZ(0)";
+    firstCard.style.transform="translateZ(0)";
+    firstCard.style.webkitBackfaceVisibility="hidden";
+    firstCard.style.backfaceVisibility="hidden";
+    firstCard.offsetHeight;
+  }
+
+  requestAnimationFrame(()=>{
+    masonry.style.webkitTransform="";
+    masonry.style.transform="";
+    if(firstCard){
+      firstCard.style.webkitTransform="";
+      firstCard.style.transform="";
+    }
+  });
+}
+
 function showMain(){
   if(isMain) return;
   isMain=true;
   header.classList.remove("is-hidden");
   main.classList.remove("is-hidden");
 
-  // iOS Safari columns paint bug: force repaint right after reveal
-  setTimeout(fixMasonryIOS, 60);
-  setTimeout(fixMasonryIOS, 250);
+  // ✅ 메인이 나타나는 순간 iOS bug가 터지기 쉬움 -> 강제 reflow
+  setTimeout(fixMasonryIOS, 80);
+  setTimeout(fixMasonryIOS, 260);
+  setTimeout(fixMasonryIOS, 900);
 }
 
 function buildMasonry(){
@@ -53,6 +103,7 @@ function buildMasonry(){
       <div class="thumb"><img loading="lazy" src="${d.src}" alt="${d.title}"></div>
     </article>
   `).join("");
+
   masonry.querySelectorAll(".card").forEach(card=>{
     const i=+card.dataset.i;
 
@@ -64,11 +115,15 @@ function buildMasonry(){
 
     card.addEventListener("click",()=>openDetail(i));
   });
+
+  // masonry 구성 직후에도 한번
+  setTimeout(fixMasonryIOS, 60);
 }
 
 function openDetail(i){
   const d=data[i];
   document.body.classList.add("is-focus");
+
   masonry.querySelectorAll(".card").forEach(c=>c.classList.remove("is-active"));
   const active=masonry.querySelector(`.card[data-i="${i}"]`);
   if(active) active.classList.add("is-active");
@@ -106,21 +161,10 @@ function skipIntro(e){
   onIntroEnd();
 }
 
-function setMobileVideo(){
-  if(window.matchMedia("(max-width:520px)").matches){
-    // 모바일 전용 영상 파일
-    if(video.getAttribute("data-mobile-set")!=="1"){
-      video.src="images/video1-mobile.mp4";
-      video.setAttribute("data-mobile-set","1");
-      video.load();
-    }
-  }
-}
-
 async function boot(){
   buildMasonry();
 
-  // 모바일 전용 영상 적용
+  // ✅ 모바일 비디오 교체
   setMobileVideo();
 
   try{await video.play();}catch(e){}
@@ -129,40 +173,11 @@ async function boot(){
     if(video.duration && video.currentTime>=video.duration-0.06) onIntroEnd();
   });
 
-  // 인트로 스킵 (아무 곳이나 탭/클릭)
+  // 인트로 스킵
   document.addEventListener("click",skipIntro,true);
   document.addEventListener("touchstart",skipIntro,true);
 }
 boot();
-
-/* iOS Safari: masonry/columns 첫 카드 깜빡임/실종 방지 (strong fix) */
-function fixMasonryIOS(){
-  if(!masonry) return;
-
-  masonry.style.webkitTransform="translateZ(0)";
-  masonry.style.transform="translateZ(0)";
-  masonry.style.webkitBackfaceVisibility="hidden";
-  masonry.style.backfaceVisibility="hidden";
-  masonry.offsetHeight; // force reflow
-
-  const firstCard=masonry.querySelector(".card");
-  if(firstCard){
-    firstCard.style.webkitTransform="translateZ(0)";
-    firstCard.style.transform="translateZ(0)";
-    firstCard.style.webkitBackfaceVisibility="hidden";
-    firstCard.style.backfaceVisibility="hidden";
-    firstCard.offsetHeight;
-  }
-
-  requestAnimationFrame(()=>{
-    masonry.style.webkitTransform="";
-    masonry.style.transform="";
-    if(firstCard){
-      firstCard.style.webkitTransform="";
-      firstCard.style.transform="";
-    }
-  });
-}
 
 window.addEventListener("load",()=>{
   setTimeout(fixMasonryIOS,50);
